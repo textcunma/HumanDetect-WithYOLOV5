@@ -12,12 +12,12 @@ def main():
 
     with open('result.csv', 'w') as f:
         writer = csv.writer(f)
-        writer.writerow(["frame","object","Conf Score"])
+        writer.writerow(["frame","Conf Score"])
         for r in result:
             frame=r[0]
             object,score=r[1].split()
             if object=="person":
-                writer.writerow([frame,object,score])
+                writer.writerow([frame,score])
 
 if __name__ == "__main__":
     main()
