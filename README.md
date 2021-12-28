@@ -24,3 +24,4 @@ pip install opencv-python-headless
 ### ブランチ
 - main : CSV出力
 - frameMask : 人間がいるフレームは[1]、いないフレームは[0]とするマスクを出力
+- nonHuman  : 　人間がいない区間の秒数を出力
