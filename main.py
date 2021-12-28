@@ -3,6 +3,7 @@
 出力：人間を検知したフレーム数
 """
 import csv
+import cv2
 from detect import detect_main
 
 def main():
@@ -10,22 +11,23 @@ def main():
     conf=0.80       #信頼度確率（値以上）
     result,numFrame=detect_main(MP4path,conf)
 
-    frameinHuman=[]
-    frameinHuman+=[0]*(result[0]-1-1)     #人間が初めて検知されたフレーム数よりも前のフレームを全て[0]とする
+    cap = cv2.VideoCapture(MP4path)
+    fps=cap.get(cv2.CAP_PROP_FPS)
+
+    zeroArea=[]
+
+    if result[0]-1-1>0:
+        zeroArea.append([1/fps,(result[0]-1)/fps])      #1フレーム目から
+
     for i in range(len(result)-1):
-        frameinHuman+=[1]                 # Personラベルが検知されたフレーム番号なので毎回[1]が入る
         start=result[i]
         end=result[i+1]
-        if end-start<24:                  #24フレーム以上人間が出てこない場合
-            frameinHuman+=[1]*(end-start-1)
-        else:
-            frameinHuman+=[1]       #start分
-            frameinHuman+=[0]*(end-start-1-1)
+        if end-start>24:                  #24フレーム以上人間が出てこない場合
+            zeroArea.append([(start+1)/fps,(end-1)/fps])
 
-    frameinHuman+=[1]       #検知された最後のPersonラベルのあるフレーム数を追加
-    frameinHuman+=[0]*(numFrame-result[-1])     #Personラベルのフレームの後にあるフレームは全て人間以外なので[0]を追加
-
-    print(frameinHuman)
+    if numFrame!=result[-1]:
+        zeroArea.append([(result[-1]+1)/fps,numFrame/fps])
+    print(zeroArea)
 
 
 
