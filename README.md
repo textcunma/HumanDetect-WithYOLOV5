@@ -20,3 +20,7 @@ pip install -U -r yolov5/requirements.txt
 pip install pyqt5
 pip install opencv-python-headless
 ```
+
+### ブランチ
+- main : CSV出力
+- frameMask : 人間がいるフレームは[1]、いないフレームは[0]とするマスクを出力
