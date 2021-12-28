@@ -161,6 +161,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
                     s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
 
                 # Write results
+                count=0     # My Program
                 for *xyxy, conf, cls in reversed(det):
                     #ORIGNAL
                     # if save_txt:  # Write to file
@@ -172,13 +173,17 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
                     if save_img or save_crop or view_img:  # Add bbox to image
                         c = int(cls)  # integer class
                         label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
-                        annotator.box_label(xyxy, label, color=colors(c, True))
+                        # annotator.box_label(xyxy, label, color=colors(c, True))
                         #ORIGINAL
                         # if save_crop:
                         #     save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
 
                         # My Program
-                        result.append([seen,label])         #何フレーム目、ラベル（物体名前+信頼度）をresultに追加
+                        if count==0 and 'person'== label[:6]:
+                            result.append(seen)         #何フレーム目、ラベル（物体名前+信頼度）をresultに追加
+                        count+=1
+
+
 
 
             # ORIGINAL
@@ -223,7 +228,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
     #     strip_optimizer(weights)  # update model (to fix SourceChangeWarning)
 
     # My Program
-    return result
+    return result,seen
 
 
 
